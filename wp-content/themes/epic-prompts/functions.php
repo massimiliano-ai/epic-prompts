@@ -40,6 +40,9 @@ function epic_prompts_enqueue_assets() {
     // Custom CSS
     wp_enqueue_style('epic-prompts-custom', get_template_directory_uri() . '/css/custom.css', array(), '1.0.0');
 
+    // Professional CSS
+    wp_enqueue_style('epic-prompts-professional', get_template_directory_uri() . '/css/professional.css', array(), '1.0.0');
+
     // jQuery (included in WordPress)
     wp_enqueue_script('jquery');
 
@@ -240,3 +243,5 @@ function epic_prompts_get_category($prompt_id) {
  */
 require_once get_template_directory() . '/includes/widgets.php';
 require_once get_template_directory() . '/includes/shortcodes.php';
+require_once get_template_directory() . '/includes/customizer.php';
+require_once get_template_directory() . '/includes/onboarding.php';
