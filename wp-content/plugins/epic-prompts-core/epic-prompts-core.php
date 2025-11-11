@@ -80,6 +80,11 @@ class Epic_Prompts_Core {
         require_once EPIC_PROMPTS_PLUGIN_DIR . 'includes/user-functions.php';
         require_once EPIC_PROMPTS_PLUGIN_DIR . 'includes/xp-system.php';
         require_once EPIC_PROMPTS_PLUGIN_DIR . 'includes/ajax-handlers.php';
+
+        // Load admin functions if in admin area
+        if (is_admin()) {
+            require_once EPIC_PROMPTS_PLUGIN_DIR . 'includes/admin.php';
+        }
     }
 
     /**

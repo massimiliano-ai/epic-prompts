@@ -48,6 +48,24 @@ get_header();
                 </div>
 
                 <div class="filter-group">
+                    <label for="filter-type">Prompt Type</label>
+                    <select id="filter-type" name="prompt_type" class="search-input">
+                        <option value="">All Types</option>
+                        <?php
+                        $types = get_terms(array(
+                            'taxonomy' => 'prompt_type',
+                            'hide_empty' => false,
+                        ));
+                        $current_type = isset($_GET['prompt_type']) ? $_GET['prompt_type'] : '';
+                        foreach ($types as $type) {
+                            $selected = ($current_type == $type->slug) ? 'selected' : '';
+                            echo '<option value="' . esc_attr($type->slug) . '" ' . $selected . '>' . esc_html($type->name) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="filter-group">
                     <label for="filter-category">Category</label>
                     <select id="filter-category" name="category" class="search-input">
                         <option value="">All Categories</option>
@@ -107,6 +125,15 @@ get_header();
             'taxonomy' => 'ai_platform',
             'field' => 'slug',
             'terms' => sanitize_text_field($_GET['platform']),
+        );
+    }
+
+    // Prompt type filter
+    if (!empty($_GET['prompt_type'])) {
+        $query_args['tax_query'][] = array(
+            'taxonomy' => 'prompt_type',
+            'field' => 'slug',
+            'terms' => sanitize_text_field($_GET['prompt_type']),
         );
     }
 
