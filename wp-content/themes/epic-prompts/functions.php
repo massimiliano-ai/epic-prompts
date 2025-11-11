@@ -234,3 +234,9 @@ function epic_prompts_get_category($prompt_id) {
     }
     return '';
 }
+
+/**
+ * Load theme includes
+ */
+require_once get_template_directory() . '/includes/widgets.php';
+require_once get_template_directory() . '/includes/shortcodes.php';
