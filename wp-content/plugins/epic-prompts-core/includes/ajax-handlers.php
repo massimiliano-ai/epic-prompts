@@ -105,17 +105,14 @@ class EP_Ajax_Handlers {
         $prompt_text = isset($_POST['prompt_text']) ? sanitize_textarea_field($_POST['prompt_text']) : '';
         $description = isset($_POST['description']) ? wp_kses_post($_POST['description']) : '';
         $platform = isset($_POST['platform']) ? intval($_POST['platform']) : 0;
+        $prompt_type = isset($_POST['prompt_type']) ? intval($_POST['prompt_type']) : 0;
         $category = isset($_POST['category']) ? intval($_POST['category']) : 0;
         $tags = isset($_POST['tags']) ? sanitize_text_field($_POST['tags']) : '';
-        $result_image_id = isset($_POST['result_image_id']) ? intval($_POST['result_image_id']) : 0;
+        $result_image_id = isset($_POST['result_image_id']) && !empty($_POST['result_image_id']) ? intval($_POST['result_image_id']) : 0;
 
         // Validation
         if (empty($title) || empty($prompt_text)) {
             wp_send_json_error(array('message' => __('Title and prompt text are required.', 'epic-prompts')));
-        }
-
-        if (!$result_image_id) {
-            wp_send_json_error(array('message' => __('Result image is required.', 'epic-prompts')));
         }
 
         // Determine post status based on user level
@@ -139,8 +136,12 @@ class EP_Ajax_Handlers {
 
         // Set post meta
         update_post_meta($prompt_id, 'prompt_text', $prompt_text);
-        update_post_meta($prompt_id, 'result_image', $result_image_id);
-        set_post_thumbnail($prompt_id, $result_image_id);
+
+        // Set image only if provided
+        if ($result_image_id) {
+            update_post_meta($prompt_id, 'result_image', $result_image_id);
+            set_post_thumbnail($prompt_id, $result_image_id);
+        }
 
         // Initialize counts
         update_post_meta($prompt_id, 'views_count', 0);
@@ -158,6 +159,10 @@ class EP_Ajax_Handlers {
         // Set taxonomies
         if ($platform) {
             wp_set_object_terms($prompt_id, $platform, 'ai_platform');
+        }
+
+        if ($prompt_type) {
+            wp_set_object_terms($prompt_id, $prompt_type, 'prompt_type');
         }
 
         if ($category) {
@@ -343,21 +348,43 @@ class EP_Ajax_Handlers {
             wp_send_json_error(array('message' => __('You must be logged in.', 'epic-prompts')));
         }
 
-        if (!isset($_FILES['image'])) {
+        if (!isset($_FILES['image']) || empty($_FILES['image']['name'])) {
             wp_send_json_error(array('message' => __('No image uploaded.', 'epic-prompts')));
+        }
+
+        // Check for upload errors
+        if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            $error_messages = array(
+                UPLOAD_ERR_INI_SIZE => 'File exceeds upload_max_filesize',
+                UPLOAD_ERR_FORM_SIZE => 'File exceeds MAX_FILE_SIZE',
+                UPLOAD_ERR_PARTIAL => 'File was only partially uploaded',
+                UPLOAD_ERR_NO_FILE => 'No file was uploaded',
+                UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary folder',
+                UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
+                UPLOAD_ERR_EXTENSION => 'Upload stopped by extension',
+            );
+            $error_msg = isset($error_messages[$_FILES['image']['error']])
+                ? $error_messages[$_FILES['image']['error']]
+                : 'Unknown upload error';
+            wp_send_json_error(array('message' => $error_msg));
         }
 
         // Validate file
         $file = $_FILES['image'];
-        $allowed_types = array('image/jpeg', 'image/png', 'image/webp');
+        $allowed_types = array('image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif');
 
-        if (!in_array($file['type'], $allowed_types)) {
-            wp_send_json_error(array('message' => __('Invalid file type. Only JPG, PNG, and WebP are allowed.', 'epic-prompts')));
+        // Check MIME type
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        if (!in_array($mime_type, $allowed_types)) {
+            wp_send_json_error(array('message' => __('Invalid file type. Only JPG, PNG, WebP and GIF are allowed.', 'epic-prompts')));
         }
 
-        // 5MB max
-        if ($file['size'] > 5 * 1024 * 1024) {
-            wp_send_json_error(array('message' => __('File size must be less than 5MB.', 'epic-prompts')));
+        // 10MB max (aumentato per screenshots)
+        if ($file['size'] > 10 * 1024 * 1024) {
+            wp_send_json_error(array('message' => __('File size must be less than 10MB.', 'epic-prompts')));
         }
 
         // Upload file
@@ -365,7 +392,18 @@ class EP_Ajax_Handlers {
         require_once(ABSPATH . 'wp-admin/includes/media.php');
         require_once(ABSPATH . 'wp-admin/includes/image.php');
 
-        $attachment_id = media_handle_upload('image', 0);
+        // Override default upload handling
+        add_filter('upload_dir', function($uploads) use ($user_id) {
+            $uploads['subdir'] = '/epic-prompts/' . date('Y/m');
+            $uploads['path'] = $uploads['basedir'] . $uploads['subdir'];
+            $uploads['url'] = $uploads['baseurl'] . $uploads['subdir'];
+            return $uploads;
+        });
+
+        $attachment_id = media_handle_upload('image', 0, array(
+            'post_title' => sanitize_file_name(pathinfo($file['name'], PATHINFO_FILENAME)),
+            'post_author' => $user_id,
+        ));
 
         if (is_wp_error($attachment_id)) {
             wp_send_json_error(array('message' => $attachment_id->get_error_message()));
@@ -374,6 +412,7 @@ class EP_Ajax_Handlers {
         wp_send_json_success(array(
             'attachment_id' => $attachment_id,
             'url' => wp_get_attachment_url($attachment_id),
+            'thumb' => wp_get_attachment_image_url($attachment_id, 'thumbnail'),
         ));
     }
 }

@@ -1,11 +1,12 @@
-# Epic Prompts - MVP
+# Epic Prompts - Universal AI Prompts Platform
 
-Piattaforma gamificata per la condivisione e scoperta di prompt AI.
+Piattaforma gamificata per la condivisione e scoperta di **prompts per tutte le piattaforme AI**.
 
 ## 🚀 Panoramica
 
-Epic Prompts è una piattaforma WordPress che permette agli utenti di:
-- Condividere prompt AI per image generation (Midjourney, DALL-E, Stable Diffusion, Leonardo.ai)
+Epic Prompts è una piattaforma WordPress universale che permette agli utenti di:
+- Condividere prompt AI per **qualsiasi piattaforma**: ChatGPT, Claude, Midjourney, DALL-E, Stable Diffusion, GitHub Copilot, Suno AI, e molte altre
+- Gestire prompt per **tutti i tipi di output**: testo, immagini, codice, video, audio/musica
 - Votare e reagire ai prompt della community
 - Guadagnare XP, salire di livello e sbloccare badge
 - Competere nelle leaderboard mensili e globali
@@ -75,7 +76,7 @@ epic-prompts/
 │   │       ├── epic-prompts-core.php   # File principale plugin
 │   │       ├── includes/               # Logica backend
 │   │       │   ├── post-types.php      # Custom Post Types
-│   │       │   ├── taxonomies.php      # Taxonomies
+│   │       │   ├── taxonomies.php      # Taxonomies (50+ piattaforme AI)
 │   │       │   ├── user-functions.php  # Funzioni utente
 │   │       │   ├── xp-system.php       # Sistema XP e livelli
 │   │       │   └── ajax-handlers.php   # Handler AJAX
@@ -108,13 +109,24 @@ epic-prompts/
 ### ✅ Completate
 
 1. **Custom Post Types**
-   - `ai_prompt` - Prompt AI
+   - `ai_prompt` - Prompt AI universali
    - `prompt_vote` - Voti e recensioni
    - `prompt_collection` - Collezioni (futuro)
 
 2. **Taxonomies**
-   - `ai_platform` - Piattaforme AI (Midjourney, DALL-E, etc.)
-   - `prompt_category` - Categorie (Character Design, Landscapes, etc.)
+   - `ai_platform` - **50+ Piattaforme AI**:
+     - **Text/Chat**: ChatGPT 3.5/4/4 Turbo/o1, Claude 3 (Haiku/Sonnet/Opus), Gemini 1.0/1.5/2.0, Perplexity, Microsoft Copilot, Llama 3, Mistral AI, Grok
+     - **Image Generation**: Midjourney v5/v6/v7, DALL-E 2/3, Stable Diffusion XL/3, Leonardo.ai, Adobe Firefly, Ideogram, Flux
+     - **Video Generation**: Runway Gen-3, Sora, Pika Labs, Synthesia, HeyGen
+     - **Code Generation**: GitHub Copilot, Cursor AI, Replit AI, Amazon CodeWhisperer, Tabnine
+     - **Audio/Music**: ElevenLabs, Suno AI, Udio, Mubert
+     - **Other Tools**: Jasper AI, Copy.ai, Notion AI, Gamma AI
+   - `prompt_type` - **20+ Tipi di Prompt**:
+     - Text Generation, Image Generation, Code Generation, Video Generation, Audio Generation, Music Generation
+     - Data Analysis, Content Writing, Creative Writing, Translation, Summarization
+     - Question Answering, Chatbot, Role-Playing, Brainstorming, Problem Solving
+     - Education, Business, Marketing, SEO
+   - `prompt_category` - **40+ Categorie** organizzate per dominio
    - `prompt_tag` - Tag liberi
 
 3. **Sistema Gamification**
@@ -130,11 +142,11 @@ epic-prompts/
    - XP per chi vota (+2) e per il creator (+5)
 
 5. **Frontend Features**
-   - Browse grid con filtri (piattaforma, categoria, sort)
+   - Browse grid con filtri (piattaforma, tipo, categoria, sort)
    - Single prompt page con reactions
-   - Submit form con upload immagini
+   - Submit form universale con **immagine opzionale**
    - User profile con stats e badge
-   - Leaderboard globale
+   - Leaderboard globale e mensile
 
 6. **User Stats Tracking**
    - XP totale e mensile
@@ -143,6 +155,11 @@ epic-prompts/
    - Reviews written
    - Streak days
    - Reputation score
+
+7. **Upload Sistema**
+   - Upload immagini/screenshot opzionale
+   - Max 10MB (JPG, PNG, WebP, GIF)
+   - Supporto per prompt senza immagini (text, code, ecc.)
 
 ## 🎯 Guadagno XP
 
@@ -172,13 +189,50 @@ epic-prompts/
 
 - Nonce verification su tutte le chiamate AJAX
 - Sanitization di tutti gli input utente
-- Validation lato server per upload immagini (max 5MB, solo JPG/PNG/WebP)
+- Validation lato server per upload immagini (max 10MB, solo JPG/PNG/WebP/GIF)
+- MIME type verification per file upload
 - Capability checks per azioni privilegiate
 - Rate limiting preparato (da implementare in produzione)
+
+## 💡 Casi d'Uso
+
+Epic Prompts supporta prompt per:
+
+### 📝 Text & Content
+- Email templates
+- Blog post structures
+- Social media captions
+- Marketing copy
+- Technical documentation
+
+### 🎨 Visual & Creative
+- Image generation prompts
+- Art style descriptions
+- Character designs
+- Product photography setups
+
+### 💻 Code & Development
+- Code generation templates
+- Bug fix prompts
+- Code review guidelines
+- Architecture suggestions
+
+### 🎬 Multimedia
+- Video generation scripts
+- Music composition prompts
+- Audio narration styles
+- Voice cloning settings
+
+### 🤖 Specialized AI
+- Role-playing scenarios
+- Educational tutoring
+- Business analysis
+- Data interpretation
 
 ## 🚧 TODO / Roadmap
 
 ### Fase 2 (Post-MVP)
+- [ ] Filtri per Prompt Type nell'archive
 - [ ] Verification system completo con upload risultati
 - [ ] Rating dettagliato (5 criteri)
 - [ ] Collections pubbliche/private
@@ -192,10 +246,11 @@ epic-prompts/
 ### Fase 3 (Advanced)
 - [ ] Mobile PWA
 - [ ] API pubblica
-- [ ] Video prompts (Sora, Runway)
-- [ ] ChatGPT/Claude prompts
+- [ ] AI-powered prompt suggestions
+- [ ] Prompt testing playground
 - [ ] Premium features opzionali
 - [ ] Localizzazione italiana
+- [ ] Integration con API dirette (OpenAI, Anthropic, ecc.)
 
 ## 🎨 Design System
 
@@ -213,6 +268,17 @@ epic-prompts/
 - Headings: System fonts
 - Body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
 
+## 🌍 Supporto Multilingua
+
+Attualmente supportato:
+- 🇬🇧 Inglese (default)
+
+Pianificati:
+- 🇮🇹 Italiano
+- 🇪🇸 Spagnolo
+- 🇫🇷 Francese
+- 🇩🇪 Tedesco
+
 ## 🤝 Contribuire
 
 Epic Prompts è in fase MVP. Contributi benvenuti!
@@ -227,7 +293,8 @@ Segnala bug e richieste features via GitHub Issues.
 
 ---
 
-**Built with ❤️ for the AI community**
+**Built with ❤️ for the universal AI community**
 
-*Version: 1.0.0 - MVP*
+*Version: 1.1.0 - Universal Platform*
 *Date: November 2025*
+*Now supporting 50+ AI platforms and 20+ prompt types!*

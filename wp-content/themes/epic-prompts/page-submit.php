@@ -35,7 +35,7 @@ get_header();
                     name="title"
                     required
                     class="search-input"
-                    placeholder="e.g., Stunning Cyberpunk Character Design"
+                    placeholder="e.g., Professional Email Writer for Customer Service"
                     style="width: 100%;"
                 >
                 <small style="color: #6B7280; font-size: 0.875rem;">
@@ -55,14 +55,14 @@ get_header();
                     class="search-input"
                     placeholder="Enter your AI prompt here..."
                     style="width: 100%; resize: vertical;"
-                    data-maxlength="2000"
+                    data-maxlength="5000"
                 ></textarea>
                 <small style="color: #6B7280; font-size: 0.875rem;">
                     The actual prompt you use in your AI tool
                 </small>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
                 <div class="form-group">
                     <label for="platform" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
                         AI Platform <span style="color: #EF4444;">*</span>
@@ -73,9 +73,64 @@ get_header();
                         $platforms = get_terms(array(
                             'taxonomy' => 'ai_platform',
                             'hide_empty' => false,
+                            'orderby' => 'name',
                         ));
+
+                        // Group platforms by type
+                        $platform_groups = array();
                         foreach ($platforms as $platform) {
-                            echo '<option value="' . esc_attr($platform->term_id) . '">' . esc_html($platform->name) . '</option>';
+                            $name = $platform->name;
+                            if (strpos($name, 'ChatGPT') !== false || strpos($name, 'Claude') !== false ||
+                                strpos($name, 'Gemini') !== false || strpos($name, 'Copilot') !== false ||
+                                strpos($name, 'Perplexity') !== false || strpos($name, 'Llama') !== false ||
+                                strpos($name, 'Mistral') !== false || strpos($name, 'Grok') !== false) {
+                                $platform_groups['Text/Chat AI'][] = $platform;
+                            } elseif (strpos($name, 'Midjourney') !== false || strpos($name, 'DALL-E') !== false ||
+                                      strpos($name, 'Stable Diffusion') !== false || strpos($name, 'Leonardo') !== false ||
+                                      strpos($name, 'Firefly') !== false || strpos($name, 'Ideogram') !== false ||
+                                      strpos($name, 'Flux') !== false) {
+                                $platform_groups['Image Generation'][] = $platform;
+                            } elseif (strpos($name, 'Runway') !== false || strpos($name, 'Sora') !== false ||
+                                      strpos($name, 'Pika') !== false || strpos($name, 'Synthesia') !== false ||
+                                      strpos($name, 'HeyGen') !== false) {
+                                $platform_groups['Video Generation'][] = $platform;
+                            } elseif (strpos($name, 'Copilot') !== false || strpos($name, 'Cursor') !== false ||
+                                      strpos($name, 'Replit') !== false || strpos($name, 'Tabnine') !== false ||
+                                      strpos($name, 'CodeWhisperer') !== false) {
+                                $platform_groups['Code Generation'][] = $platform;
+                            } elseif (strpos($name, 'ElevenLabs') !== false || strpos($name, 'Suno') !== false ||
+                                      strpos($name, 'Udio') !== false || strpos($name, 'Mubert') !== false) {
+                                $platform_groups['Audio/Music'][] = $platform;
+                            } else {
+                                $platform_groups['Other Tools'][] = $platform;
+                            }
+                        }
+
+                        foreach ($platform_groups as $group_name => $group_platforms) {
+                            echo '<optgroup label="' . esc_attr($group_name) . '">';
+                            foreach ($group_platforms as $platform) {
+                                echo '<option value="' . esc_attr($platform->term_id) . '">' . esc_html($platform->name) . '</option>';
+                            }
+                            echo '</optgroup>';
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt-type" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                        Prompt Type <span style="color: #EF4444;">*</span>
+                    </label>
+                    <select id="prompt-type" name="prompt_type" required class="search-input" style="width: 100%;">
+                        <option value="">Select type...</option>
+                        <?php
+                        $types = get_terms(array(
+                            'taxonomy' => 'prompt_type',
+                            'hide_empty' => false,
+                            'orderby' => 'name',
+                        ));
+                        foreach ($types as $type) {
+                            echo '<option value="' . esc_attr($type->term_id) . '">' . esc_html($type->name) . '</option>';
                         }
                         ?>
                     </select>
@@ -91,6 +146,7 @@ get_header();
                         $categories = get_terms(array(
                             'taxonomy' => 'prompt_category',
                             'hide_empty' => false,
+                            'orderby' => 'name',
                         ));
                         foreach ($categories as $category) {
                             echo '<option value="' . esc_attr($category->term_id) . '">' . esc_html($category->name) . '</option>';
@@ -109,7 +165,7 @@ get_header();
                     id="tags"
                     name="tags"
                     class="search-input"
-                    placeholder="e.g., cyberpunk, neon, character"
+                    placeholder="e.g., email, professional, customer-service"
                     style="width: 100%;"
                 >
                 <small style="color: #6B7280; font-size: 0.875rem;">
@@ -119,21 +175,20 @@ get_header();
 
             <div class="form-group" style="margin-bottom: 1.5rem;">
                 <label for="result-image" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
-                    Result Image <span style="color: #EF4444;">*</span>
+                    Result Image/Screenshot (optional)
                 </label>
                 <div id="image-upload-area" style="border: 2px dashed #D1D5DB; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;">
                     <input
                         type="file"
                         id="result-image"
                         name="result_image"
-                        accept="image/jpeg,image/png,image/webp"
+                        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                         style="display: none;"
-                        required
                     >
                     <div id="upload-placeholder">
                         <div style="font-size: 3rem; margin-bottom: 0.5rem;">📸</div>
-                        <p style="font-weight: 600; margin-bottom: 0.25rem;">Click to upload result image</p>
-                        <small style="color: #6B7280;">JPG, PNG or WebP (max 5MB)</small>
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">Click to upload result image or screenshot</p>
+                        <small style="color: #6B7280;">JPG, PNG, WebP or GIF (max 10MB) - Optional but recommended</small>
                     </div>
                     <div id="image-preview" style="display: none;">
                         <img id="preview-img" src="" alt="Preview" style="max-width: 100%; max-height: 400px; border-radius: 0.5rem;">
@@ -154,9 +209,12 @@ get_header();
                     name="description"
                     rows="4"
                     class="search-input"
-                    placeholder="Add any additional context, tips, or variations..."
+                    placeholder="Add any additional context, tips, variations, or usage instructions..."
                     style="width: 100%; resize: vertical;"
                 ></textarea>
+                <small style="color: #6B7280; font-size: 0.875rem;">
+                    Provide helpful context or tips for using this prompt
+                </small>
             </div>
 
             <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
@@ -175,10 +233,12 @@ get_header();
             <h3 style="margin-bottom: 1rem; color: #92400E;">💡 Tips for Great Prompts</h3>
             <ul style="list-style: disc; padding-left: 1.5rem; color: #78350F;">
                 <li>Be specific and detailed in your prompt text</li>
-                <li>Upload a high-quality result image</li>
-                <li>Choose the correct platform and category</li>
-                <li>Add relevant tags to help others find your prompt</li>
-                <li>Include any important settings or parameters in the description</li>
+                <li>Include the context and desired output format</li>
+                <li>Choose the correct platform, type, and category</li>
+                <li>Upload a screenshot or result image when possible</li>
+                <li>Add relevant tags to help others discover your prompt</li>
+                <li>Provide usage tips and examples in the description</li>
+                <li>Test your prompt before submitting to ensure it works well</li>
             </ul>
         </div>
     </div>
@@ -196,15 +256,15 @@ jQuery(document).ready(function($) {
         var file = e.target.files[0];
 
         if (file) {
-            // Validate file size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('File size must be less than 5MB');
+            // Validate file size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
                 return;
             }
 
             // Validate file type
-            if (!file.type.match('image/(jpeg|png|webp)')) {
-                alert('Only JPG, PNG, and WebP images are allowed');
+            if (!file.type.match('image/(jpeg|jpg|png|webp|gif)')) {
+                alert('Only JPG, PNG, WebP and GIF images are allowed');
                 return;
             }
 
@@ -223,6 +283,8 @@ jQuery(document).ready(function($) {
             formData.append('nonce', epicPromptsTheme.nonce);
             formData.append('image', file);
 
+            $('#image-upload-area').css('opacity', '0.5');
+
             $.ajax({
                 url: epicPromptsTheme.ajaxurl,
                 type: 'POST',
@@ -230,9 +292,23 @@ jQuery(document).ready(function($) {
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    $('#image-upload-area').css('opacity', '1');
                     if (response.success) {
                         $('#result-image-id').val(response.data.attachment_id);
+                        console.log('Image uploaded successfully:', response.data.attachment_id);
+                    } else {
+                        alert('Upload failed: ' + (response.data.message || 'Unknown error'));
+                        $('#result-image').val('');
+                        $('#upload-placeholder').show();
+                        $('#image-preview').hide();
                     }
+                },
+                error: function(xhr, status, error) {
+                    $('#image-upload-area').css('opacity', '1');
+                    alert('Upload error: ' + error);
+                    $('#result-image').val('');
+                    $('#upload-placeholder').show();
+                    $('#image-preview').hide();
                 }
             });
         }
@@ -255,12 +331,6 @@ jQuery(document).ready(function($) {
         var $submitBtn = $('#submit-btn');
         var $message = $('#submit-message');
 
-        // Validate
-        if (!$('#result-image-id').val()) {
-            $message.css('background', '#FEE2E2').css('color', '#991B1B').text('Please upload a result image').show();
-            return;
-        }
-
         // Prepare data
         var formData = {
             action: 'submit_prompt',
@@ -268,10 +338,11 @@ jQuery(document).ready(function($) {
             title: $('#prompt-title').val(),
             prompt_text: $('#prompt-text').val(),
             platform: $('#platform').val(),
+            prompt_type: $('#prompt-type').val(),
             category: $('#category').val(),
             tags: $('#tags').val(),
             description: $('#description').val(),
-            result_image_id: $('#result-image-id').val()
+            result_image_id: $('#result-image-id').val() || ''
         };
 
         // Submit
