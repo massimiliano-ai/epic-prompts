@@ -1,0 +1,464 @@
+/**
+ * Epic Prompts - Admin Styles
+ * Styles for the WordPress admin area
+ */
+
+/* ========================================
+   ADMIN PAGES
+   ======================================== */
+
+.epic-prompts-admin {
+    max-width: 1200px;
+    margin: 2rem 0;
+}
+
+.epic-prompts-admin h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.epic-prompts-admin h2 {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+}
+
+/* Admin Cards */
+.admin-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.admin-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.admin-card h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: #23282d;
+}
+
+.admin-card .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #6366F1;
+    margin: 0.5rem 0;
+}
+
+.admin-card .stat-label {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   CUSTOM COLUMNS
+   ======================================== */
+
+.column-thumbnail img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.column-reactions,
+.column-rating,
+.column-views {
+    font-weight: 600;
+}
+
+.column-ai_platform .platform-badge,
+.column-prompt_type .type-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #EEF2FF;
+    color: #6366F1;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ========================================
+   META BOXES
+   ======================================== */
+
+.epic-prompts-meta-box {
+    padding: 12px;
+}
+
+.meta-box-row {
+    margin-bottom: 1rem;
+}
+
+.meta-box-row label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.meta-box-row input[type="text"],
+.meta-box-row input[type="number"],
+.meta-box-row textarea,
+.meta-box-row select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.meta-box-row textarea {
+    min-height: 150px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.meta-box-help {
+    font-size: 0.875rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 0.25rem;
+}
+
+/* Image Preview in Meta Box */
+.image-preview {
+    margin-top: 1rem;
+}
+
+.image-preview img {
+    max-width: 300px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* ========================================
+   SETTINGS PAGE
+   ======================================== */
+
+.epic-prompts-settings {
+    background: #fff;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.settings-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+}
+
+.settings-section h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+}
+
+.setting-row {
+    margin-bottom: 1.5rem;
+}
+
+.setting-row label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.setting-row input[type="text"],
+.setting-row input[type="number"],
+.setting-row input[type="email"],
+.setting-row select {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+}
+
+.setting-row input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.setting-description {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+/* ========================================
+   PLATFORM MANAGER
+   ======================================== */
+
+.platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.platform-item {
+    background: #fff;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.platform-name {
+    font-weight: 600;
+}
+
+.platform-count {
+    background: #EEF2FF;
+    color: #6366F1;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ========================================
+   STATISTICS PAGE
+   ======================================== */
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-box.secondary {
+    background: linear-gradient(135deg, #EC4899 0%, #F59E0B 100%);
+}
+
+.stat-box.success {
+    background: linear-gradient(135deg, #10B981 0%, #3B82F6 100%);
+}
+
+.stat-box .number {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-box .label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Charts Container */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.chart-box {
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.chart-box h3 {
+    margin-top: 0;
+}
+
+/* ========================================
+   TABLES
+   ======================================== */
+
+.epic-prompts-table {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.epic-prompts-table thead {
+    background: #F9FAFB;
+}
+
+.epic-prompts-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+}
+
+.epic-prompts-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.epic-prompts-table tr:last-child td {
+    border-bottom: none;
+}
+
+.epic-prompts-table tr:hover {
+    background: #F9FAFB;
+}
+
+/* ========================================
+   BADGES & STATUS
+   ======================================== */
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.status-badge.pending {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.status-badge.inactive {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.epic-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.epic-btn-primary {
+    background: #6366F1;
+    color: white;
+}
+
+.epic-btn-primary:hover {
+    background: #4F46E5;
+}
+
+.epic-btn-secondary {
+    background: #EC4899;
+    color: white;
+}
+
+.epic-btn-secondary:hover {
+    background: #DB2777;
+}
+
+.epic-btn-outline {
+    background: transparent;
+    border: 2px solid #6366F1;
+    color: #6366F1;
+}
+
+.epic-btn-outline:hover {
+    background: #6366F1;
+    color: white;
+}
+
+/* ========================================
+   NOTICES
+   ======================================== */
+
+.epic-prompts-notice {
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    border-left: 4px solid;
+    border-radius: 4px;
+}
+
+.epic-prompts-notice.success {
+    background: #D1FAE5;
+    border-color: #10B981;
+    color: #065F46;
+}
+
+.epic-prompts-notice.warning {
+    background: #FEF3C7;
+    border-color: #F59E0B;
+    color: #92400E;
+}
+
+.epic-prompts-notice.error {
+    background: #FEE2E2;
+    border-color: #EF4444;
+    color: #991B1B;
+}
+
+.epic-prompts-notice.info {
+    background: #DBEAFE;
+    border-color: #3B82F6;
+    color: #1E40AF;
+}
+
+/* ========================================
+   LOADING STATES
+   ======================================== */
+
+.admin-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(99, 102, 241, 0.3);
+    border-top-color: #6366F1;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .admin-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+
+    .platforms-grid {
+        grid-template-columns: 1fr;
+    }
+}
