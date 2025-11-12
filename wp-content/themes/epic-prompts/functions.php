@@ -34,20 +34,20 @@ add_action('after_setup_theme', 'epic_prompts_theme_setup');
  * Enqueue scripts and styles
  */
 function epic_prompts_enqueue_assets() {
-    // Theme stylesheet
-    wp_enqueue_style('epic-prompts-style', get_stylesheet_uri(), array(), '1.0.0');
+    // Theme main stylesheet (style.css) - Changed handle to avoid conflict with plugin
+    wp_enqueue_style('epic-prompts-theme', get_stylesheet_uri(), array(), '1.0.1');
 
-    // Custom CSS
-    wp_enqueue_style('epic-prompts-custom', get_template_directory_uri() . '/css/custom.css', array(), '1.0.0');
+    // Custom CSS (depends on main theme styles)
+    wp_enqueue_style('epic-prompts-custom', get_template_directory_uri() . '/css/custom.css', array('epic-prompts-theme'), '1.0.1');
 
-    // Professional CSS
-    wp_enqueue_style('epic-prompts-professional', get_template_directory_uri() . '/css/professional.css', array(), '1.0.0');
+    // Professional CSS (depends on theme and custom CSS)
+    wp_enqueue_style('epic-prompts-professional', get_template_directory_uri() . '/css/professional.css', array('epic-prompts-theme', 'epic-prompts-custom'), '1.0.1');
 
     // jQuery (included in WordPress)
     wp_enqueue_script('jquery');
 
     // Main JavaScript
-    wp_enqueue_script('epic-prompts-main', get_template_directory_uri() . '/js/main.js', array('jquery'), '1.0.0', true);
+    wp_enqueue_script('epic-prompts-main', get_template_directory_uri() . '/js/main.js', array('jquery'), '1.0.1', true);
 
     // Clipboard.js for copy functionality
     wp_enqueue_script('clipboard-js', 'https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js', array(), '2.0.11', true);
