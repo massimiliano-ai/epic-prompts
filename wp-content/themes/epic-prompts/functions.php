@@ -151,6 +151,11 @@ function epic_prompts_get_total_reactions($prompt_id) {
  * Display user level badge
  */
 function epic_prompts_user_level_badge($user_id) {
+    if (!class_exists('EP_User_Functions')) {
+        echo '<span class="level-badge">Lv 1</span>';
+        return;
+    }
+
     $level = EP_User_Functions::get_user_level($user_id);
     $title = EP_User_Functions::get_user_title($user_id);
 
@@ -163,6 +168,15 @@ function epic_prompts_user_level_badge($user_id) {
  * Display user stats
  */
 function epic_prompts_user_stats($user_id) {
+    if (!class_exists('EP_User_Functions')) {
+        return array(
+            'xp_total' => 0,
+            'level' => 1,
+            'coins' => 0,
+            'prompts_count' => 0,
+        );
+    }
+
     $stats = EP_User_Functions::get_user_stats($user_id);
     return $stats;
 }
